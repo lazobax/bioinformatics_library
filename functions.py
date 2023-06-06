@@ -40,7 +40,7 @@ def calculateCentroid(pdbFile):
       zsum += float(line[46:54]) #z coordinate is characters 47-54
     fileObj.close()
 
-    if nAtoms = 0:
+    if nAtoms == 0:
       xavg = yavg = zavg = 0
     else:
       xavg = xsum / nAtoms
@@ -49,12 +49,41 @@ def calculateCentroid(pdbFile):
       
   return xavg, yavg, zavg
 
-def alignSequence(Q, S):
+def PAM250(x, y):
+  
+  AAs = ["C", "S", "T", "P", "A", "G", "N", 
+          "D", "E", "Q", "H", "R", "K", "M",
+          "I", "L", "V", "F", "Y", "W"]
 
-  best_score_index = 0
+  AminoHash = {AAs[i] : i for i in range(len(AAs))}
 
-  for j in range(len(S)-len(Q)):
-    
-    for i in range(len(Q)):
+  PAM250 = [[12],
+            [0,2],
+            [-2,1,3],
+            [-3,1,0,6],
+            [-2,1,1,1,2],
+            [-3,1,0,-1,1,5],
+            [-4,1,0,-1,0,0,2],
+            [-5,0,0,-1,0,1,2,4],
+            [-5,0,0,-1,0,0,1,3,4],
+            [-5,-1,-1,0,0,-1,1,2,2,4],
+            [-3,-1,-1,0,-1,-2,2,1,1,3,6],
+            [-4,0,-1,0,-2,-3,0,-1,-1,1,2,6],
+            [-5,0,0,-1,-1,-2,1,0,0,1,0,3,5],
+            [-5,-2,-1,-2,-1,-3,-2,-3,2,-1,-2,0,0,6],
+            [-2,-1,0,-2,-1,-3,-2,-2,-2,-2,-2,-2,-2,2,5],
+            [-6,-3,-2,-3,-2,-4,-3,-4,-3,-2,-2,-3,-3,4,2,6],
+            [-2,-1,0,-1,0,-1,-2,-2,-2,-2,-2,-2,-2,2,4,2,4],
+            [-4,-3,-3,-5,-4,-5,-4,-6,-5,-5,-2,-4,-5,0,1,2,-1,9],
+            [0,-3,-3,-5,3,-5,-2,-4,-4,-4,0,-4,-4,-2,-1,-1,-2,7,10,],
+            [-8,-2,-5,-6,-6,-7,-4,-7,-7,-5,-3,2,-3,-4,-5,-2,-6,0,0,17]]
 
+  xi = AminoHash[x]
+  yi = AminoHash[y]
+
+  #ensure that xi is greater than yi
+  if (yi > xi):
+    xi, yi = yi, xi
+
+  return PAM250[yi][xi]
 
