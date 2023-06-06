@@ -48,3 +48,13 @@ def calculateCentroid(pdbFile):
       zavg = zsum / nAtoms
       
   return xavg, yavg, zavg
+
+def alignSequence(Q, S):
+
+  best_score_index = 0
+
+  for j in range(len(S)-len(Q)):
+    
+    for i in range(len(Q)):
+
+
